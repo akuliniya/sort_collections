@@ -99,7 +99,45 @@ public class SortMethodsComparison {
         }
     }
 
-    private static void srtFast(List<Integer> list) {
+    private static void fastSort(List<Integer> list) {
+        recursionFastSort(list, 0, list.size() - 1);
+    }
+
+    private static void recursionFastSort(List<Integer> list, int min, int max) {
+        if (list.size() == 0)// условие выхода из рекурсии,  если размер коллекции равен 0
+            return;
+
+        if (min >= max) //выходим, так как нечего уже делить
+            return;
+
+
+        int middle = min + (max - min) / 2;  // выбираем середину
+        int middleElement = list.get(middle);
+
+
+        int i = min, j = max;
+        while (i <= j) {  // относительно элемента middle определяем меньшие элементы слева, большие справа
+            while (list.get(i) < middleElement) {
+                i++;
+            }
+            while (list.get(j) > middleElement) {
+                j--;
+            }
+
+            if (i <= j) {      //меняем местами
+                int temp = list.get(i);
+                list.set(i, list.get(j));
+                list.set(j, temp);
+                i++;
+                j--;
+            }
+        }
+
+        if (min < j) // запускаем рекурсию с элементами меньшими чем middle
+            recursionFastSort(list, min, j);
+
+        if (max > i)// запускаем рекурсию с элементами большими чем middle
+            recursionFastSort(list, i, max);
     }
 
     private static void sortByInjection(List<Integer> list) {
@@ -115,6 +153,7 @@ public class SortMethodsComparison {
     }
 
     private static void srtPyramid(List<Integer> list) {
+
     }
 
     public static void checkSortEfficiency(List<Integer> list, SortMethod sortMethod) {
@@ -131,7 +170,7 @@ public class SortMethodsComparison {
             }
             case FAST_SORT -> {
                 startTime = new Date().getTime();
-                srtFast(list);
+                fastSort(list);
                 endTime = new Date().getTime();
             }
             case BY_SELECT_METHOD -> {
